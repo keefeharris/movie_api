@@ -26,6 +26,8 @@ Morgan’s “common” format, which logs basic data such as IP address, the ti
 the request method and path, as well as the status code that was sent back as a response.
 "check terminal for date, time, etc....." 
 */
+app.use(express.static('public'));
+//This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
 
 let user = [];
 
@@ -123,6 +125,14 @@ let movie = [
       description: "The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord's encounter with his father the ambitious celestial being Ego."
   }
 ];
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Express!');
+});
+
+app.get('/movie', (req, res) => {
+  res.json(movie);
+});
 
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
