@@ -29,6 +29,12 @@ the request method and path, as well as the status code that was sent back as a 
 app.use(express.static('public'));
 //This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+//This is an error-handling middleware function that will log all application-level errors to the terminal.
+
 let user = [];
 
 let director = [];
