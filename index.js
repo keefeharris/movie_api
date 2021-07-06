@@ -43,15 +43,14 @@ app.use((err, req, res, next) => {
 //This is an error-handling middleware function that will log all application-level errors to the terminal.
 app.use(bodyParser.json());
 
-let user = [
+let users = [
     {
-        username: "",
-        email: "",
-        favorites: ""
+        username: "keefeharris",
+        email: "keefeharrisjr@gmail.com"
     }
 ];
 
-let movie = [
+let movies = [
     {
         title: "The Shawshank Redemption",
         genre: "drama",
@@ -104,7 +103,7 @@ let movie = [
     }
 ];
 
-let director = [
+let directors = [
     {
         name: "Frank Darabont",
         birthYear: "January 28, 1959",
@@ -155,14 +154,24 @@ let director = [
     }
 ];
 
+//Return a greeting message
 app.get('/', (req, res) => {
-  res.send('Welcome to Express!');
+  res.send('Welcome to Movie REST API!');
 });
 
-app.get('/movie', (req, res) => {
-  res.json(movie);
+//Return a list of ALL movies to the user
+app.get('/movies', (req, res) => {
+  res.json(movies);
 });
 
+//Return movie about a single movie by title to the user
+app.get('/movie/:title', (req, res) => {
+    res.json(movies.find((movie) => {
+        return movie.title === req.params.title
+    }));
+});
+
+//Open port 8080 which enables us to send and recieve through the server
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
