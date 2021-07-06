@@ -51,64 +51,107 @@ let user = [
     }
 ];
 
-let director = [
+let movie = [
     {
-        name: "",
-        birthYear: "",
-        bio: ""
+        title: "The Shawshank Redemption",
+        genre: "drama",
+        description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
+    },
+    {
+        title: "The Godfather",
+        genre: "crime",
+        description: "An organized crime dynasty's aging patriarch transfers control of his clandestine empire to his reluctant son."
+    },
+    {
+        title: "The Godfather: Part 2",
+        genre: "crime",
+        description: "The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate."
+    },
+    {
+        title: "The Dark Knight",
+        genre: "action",
+        description: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice."
+    },
+    {
+        title: "Angry Men",
+        genre: "crime",
+        description: "A jury holdout attempts to prevent a miscarriage of justice by forcing his colleagues to reconsider the evidence."
+    },
+    {
+        title: "Schindler's List",
+        genre: "biography",
+        description: "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis"
+    },
+    {
+        title: "The Lord Of The Rings: The Return Of The King",
+        genre: "adventure",
+        description: "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring."
+    },
+    {
+        title: "Pulp Fiction",
+        genre: "Drama",
+        description: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption."
+    },
+    {
+        title: "The Good, The Bad And The Ugly",
+        genre: "western",
+        description: "A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold buried in a remote cemetery."
+    },
+    {
+        title: "The Lord Of The Rings: The Fellowship Of The Rings",
+        genre: "adventure",
+        description: "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron"
     }
 ];
 
-let movie = [
+let director = [
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Frank Darabont",
+        birthYear: "January 28, 1959",
+        bio: "Frank Árpád Darabont is a French-American film director, screenwriter and producer of Hungarian descent. He has been nominated for three Academy Awards and a Golden Globe Award.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Francis Ford Coppola",
+        birthYear: "April 7, 1939",
+        bio: "Francis Ford Coppola was born in 1939 in Detroit, Michigan, but grew up in a New York suburb in a creative, supportive Italian-American family.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Christopher Nolan",
+        birthYear: "July 30, 1970",
+        bio: "Over the course of 15 years of filmmaking, Nolan has gone from low-budget independent films to working on some of the biggest blockbusters ever made.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Sidney Lumet",
+        birthYear: " June 25, 1924",
+        bio: "Sidney Arthur Lumet was an American film director, producer, and screenwriter with over 50 films to his credit.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Steven Spielberg",
+        birthYear: "December 18, 1946",
+        bio: "One of the most influential personalities in the history of cinema, Steven Spielberg is Hollywood's best known director and one of the wealthiest filmmakers in the world.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Peter Jackson",
+        birthYear: " October 31, 1961",
+        bio: "Sir Peter Robert Jackson ONZ KNZM is a New Zealand film director, producer, and screenwriter. He is best known as the director, writer, and producer.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Quentin Tarantino",
+        birthYear: " March 27, 1963",
+        bio: "Quentin Jerome Tarantino is an American film director, screenwriter, producer, author, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.",
+        movie: ""
     },
     {
-        title: "",
-        genre: "",
-        description: ""
-    },
-    {
-        title: "",
-        genre: "",
-        description: ""
-    },
-    {
-        title: "",
-        genre: "",
-        description: ""
+        name: "Sergio Leone",
+        birthYear: "January 3, 1929",
+        bio: "Sergio Leone was an Italian film director, producer and screenwriter, credited as the creator of the Spaghetti Western genre and widely regarded as one of the most influential directors in the history of cinema.",
+        movie: ""
     }
 ];
 
