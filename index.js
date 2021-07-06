@@ -1,8 +1,14 @@
-const express = require('express'),
-    morgan = require('morgan');
+const express = require('express');
 //the module for express is called
 const app = express();
 //the module express is encapsulated 
+const morgan = require('morgan');
+//the module for morgan is called
+const bodyParser = require('body-parser');
+//the module for body-parser is called
+const uuid = require('uuid');
+//the module for uuid is called
+
 
 
 let myLogger = (req, res, next) => {
