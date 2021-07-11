@@ -26,15 +26,24 @@ const User = mongoose.model('User', {
     email: {
         type: String
     },
-    favorites: {
-
-    }
 })
 //2 arguments are the name of the model and the name of the fields that we want
 
+/*
+IF YOU WANT TO CREATE A NEW USER
+*/
+const nUser = new User({
+    userName: 'Keefe',
+    password: 'careerfoundry',
+    email: 'keefeharrisjr@gmail.com'    
+})
+//The purpose of a constructor (new) is to create an object and set values if there are any object properties present
+// an instance of our model is created
 
-
-
+/*
+SAVE DATA TO DATABASE
+*/
+//use methods to save data to database
 
 
 
