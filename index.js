@@ -1,12 +1,13 @@
+/*
 const express = require('express');
 //the module for express is called
 const app = express();
 //the module express is encapsulated 
 const morgan = require('morgan');
 //the module for morgan is called
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 //the module for body-parser is called
-const uuid = require('uuid');
+//const uuid = require('uuid');
 //the module for uuid is called
 
 
@@ -32,7 +33,7 @@ Morgan’s “common” format, which logs basic data such as IP address, the ti
 the request method and path, as well as the status code that was sent back as a response.
 "check terminal for date, time, etc....." 
 */
-
+/*
 app.use(express.static('public'));
 //This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
 
@@ -41,14 +42,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 //This is an error-handling middleware function that will log all application-level errors to the terminal.
-app.use(bodyParser.json());
 
-let users = [
-    {
-        username: "keefeharris",
-        email: "keefeharrisjr@gmail.com"
-    }
-];
 
 let movies = [
     {
@@ -87,7 +81,7 @@ let movies = [
         description: "Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring."
     },
     {
-        title: "Pulp Fiction",
+        title: "PulpFiction",
         genre: "Drama",
         description: "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption."
     },
@@ -103,6 +97,7 @@ let movies = [
     }
 ];
 
+/*
 let directors = [
     {
         name: "Frank Darabont",
@@ -153,7 +148,8 @@ let directors = [
         movie: ""
     }
 ];
-
+*/
+/*
 //Return a greeting message
 app.get('/', (req, res) => {
   res.send('Welcome to Movie REST API!');
@@ -165,13 +161,21 @@ app.get('/movies', (req, res) => {
 });
 
 //Return movie about a single movie by title to the user
-app.get('/movie/:title', (req, res) => {
-    res.json(movies.find((movie) => {
-        return movie.title === req.params.title
-    }));
-});
+app.get('/movies/:title', (req, res) => {
+    const _title = req.params.title
+
+    movie.findById(_title).then((movie) => {
+        if(!movie) {
+            return res.status(404).send()
+        }
+        res.send(movie)
+    }).catch((e) => {
+        res.status(500).send()
+    })
+})
 
 //Open port 8080 which enables us to send and recieve through the server
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
+*/
