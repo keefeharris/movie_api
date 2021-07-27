@@ -39,7 +39,7 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 //This is an error-handling middleware function that will log all application-level errors to the terminal.
-app.use(express.json());
+app.use(bodyParser.json());
 
 function capitalizeTheFirstLetterOfEachWord(words) {
     var separateWord = words.toLowerCase().split(' ');
