@@ -4,10 +4,11 @@ const app = express();
 //the module express is encapsulated 
 const morgan = require('morgan');
 //the module for morgan is called
-const bodyParser = require('body-parser');
-//the module for body-parser is called
 const uuid = require('uuid');
 //the module for uuid is called
+const bodyParser = require('body-parser');
+//the module for body-parser is called
+
 
 let myLogger = (req, res, next) => {
   console.log(req.url);
@@ -177,8 +178,25 @@ let directors = [
     }
 ];
 
-let users = [
-
+let users = [ 
+    {
+        username: "keefe",
+        password: "adshjk",
+        movieList: "thor",
+        id: "1"
+    },
+    {
+        username: "jin",
+        password: "kazama",
+        movieList: "tekken",
+        id: "2"
+    },
+    {
+        username: "sosuke",
+        password: "aizen",
+        movieList: "bleach",
+        id: "3"
+    }
 ];
 
 //Return a greeting message to test server
@@ -237,6 +255,44 @@ app.post('/users', (req, res) => {
         res.status(201).send(newUser);
     }
 });
+
+//Allow users to update information
+app.put('/users/:username', (req, res) => {
+    let user = users.find((p_user) => {
+        return p_user.username === req.params.username
+    });
+
+    if (user) {
+        user.username === req.params.username;
+        res.status(201).send('User ' + req.params.username + ' will be assigned a new username.');
+    } else {
+        res.status(404).send('Username' + req.params.username + 'was not found');
+    };
+});
+
+//Allow users to add a movie to the list
+app.post('/users/:movieList', (req, res) => {
+    let newMovie = req.body;
+
+    if (!newMovie.movieList) {
+        const message = 'Unable to add movie to list.';
+        res.status(400).send(message);
+    } else {
+        newMovie.id = uuid.v4();
+        users.push(newMovie);
+        res.status(201).send(newMovie);
+    }
+});
+
+//Allow user to remove a movie from the list
+app.delete('/users/:movieList', (req, res) => {
+    res.send('User movie has been deleted.')
+})
+
+//Allow user to deregister
+app.delete('/users/:username', (req, res) => {
+    res.send('User has been deleted.')
+})
 
 //Open port 8080 which enables us to send and recieve through the server
 app.listen(8080, () => {
