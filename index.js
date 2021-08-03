@@ -1,6 +1,11 @@
+const express = require('express');
+const app = express();
+//the module for express is called
+//the module express is encapsulated 
+
 const mongoose = require('mongoose');
-//requires the mongoose package
 const Models = require('./models.js');
+//requires the mongoose package
 //requires the mongoose models in models.js
 
 const Movies = Models.Movie;
@@ -11,10 +16,6 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', {
 });
 //allows mongoose to connect to database to perform CRUD operations
 
-const express = require('express');
-//the module for express is called
-const app = express();
-//the module express is encapsulated 
 
 const bodyParser = require('body-parser');
 //the module for body-parser is called
@@ -25,8 +26,6 @@ const morgan = require('morgan');
 //the module for morgan is called
 const uuid = require('uuid');
 //the module for uuid is called
-
-
 
 let myLogger = (req, res, next) => {
   console.log(req.url);
@@ -50,24 +49,9 @@ the request method and path, as well as the status code that was sent back as a 
 "check terminal for date, time, etc....." 
 */
 
-app.use(express.static('public'));
-//This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
-
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
-//This is an error-handling middleware function that will log all application-level errors to the terminal.
 
 
-function capitalizeTheFirstLetterOfEachWord(words) {
-    var separateWord = words.toLowerCase().split(' ');
-    for (var i = 0; i < separateWord.length; i++) {
-       separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
-       separateWord[i].substring(1);
-    }
-    return separateWord.join(' ');
-}
+
 
 //Return a greeting message to test server
 app.get('/', (req, res) => {
@@ -86,11 +70,23 @@ app.get('/movies', (req, res) => {
     });
 });
 
+//Return a list of all users
+app.get('/users', (req, res) => {
+    Users.find()
+    .then((user) => {
+        res.json(user);
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error : ' + err);
+    });
+});
+
 //Return a single movie by title to the user
-app.get('/movies/:title', (req, res) => {
-    Movies.findOne( {Title : req.params.Title} )
-    .then((title) => {
-        res.status(201).json(title);
+app.get("/Movies/:Title", (req, res) => {
+    const mtitle = req.params.Title;
+    Movies.findOne({Title : mtitle})
+    .then((movie_t) => {
+        res.json(movie_t);
     })
     .catch((err) => {
         console.error(err);
@@ -99,6 +95,26 @@ app.get('/movies/:title', (req, res) => {
 });
 
 //return a single genre by name to user
+app.get('Movies/:Genre.Name', (req, res) => {
+    Movie.findOne({Name : req.params.Name})
+    .then((genre_name) => {
+        res.json(genre_name);
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+});
+/* ----old request
+/*
+function capitalizeTheFirstLetterOfEachWord(words) {
+    var separateWord = words.toLowerCase().split(' ');
+    for (var i = 0; i < separateWord.length; i++) {
+       separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
+       separateWord[i].substring(1);
+    }
+    return separateWord.join(' ');
+}
+
 app.get('/genres/:name', (req, res) => {
     const _gname = req.params.name
     genres.forEach((genre_name) => {
@@ -108,8 +124,20 @@ app.get('/genres/:name', (req, res) => {
     })
     return res.status(404).send("Genre not found.");
 });
+*/
 
 //Return a single director by name to user
+app.get('/Movies/:Director.Name', (req,res) => {
+    Movie.findOne( {Name : req.params.Name} )
+    .then((director_name) => {
+        res.json(director_name);
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
+});
+
+/* -----old request
 app.get('/directors/:name', (req, res) => {
     const _name = req.params.name
     directors.forEach((director) => {
@@ -119,8 +147,35 @@ app.get('/directors/:name', (req, res) => {
     })
     return res.status(404).send("Director not found.");
 });
+*/
 
 //Allow new users to register
+app.post('/users', (req, res) => {
+    Users.findOne( {Username: req.body.Username} )
+    .then((user) => {
+        if (user) {
+            return res.status(400).send(req.body.Username + ' already exist.');
+        } else {
+          Users.create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday:  req.body.Birthday,
+            Favorites: req.body.Favorites
+          })
+          .then((user) => {res.status(201).json(user)} )
+          .catch((error) => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+          })   
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+    });
+});
+/* ----old request
 app.post('/users', (req, res) => {
     let newUser = req.body;
 
@@ -133,8 +188,36 @@ app.post('/users', (req, res) => {
         res.status(201).send(newUser);
     }
 });
+*/
+
+
+
+
+
 
 //Allow users to update information
+app.put('/Users/:Username', (req, res) => {
+    Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        { $set: 
+            {
+                Username: req.body.Username,
+                Password: req.body.Password,
+                Email: req.body.Email,
+                Birthday: req.body.Birthday
+            }
+        },
+        { new: true },
+        (err, updatedUser) => {
+            if (err){
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+        } else {
+            res.json(updatedUser);
+        }
+    });
+});
+/* ----old request
 app.put('/users/:username', (req, res) => {
     let user = users.find((p_user) => {
         return p_user.username === req.params.username
@@ -147,8 +230,23 @@ app.put('/users/:username', (req, res) => {
         res.status(404).send('Username' + req.params.username + 'was not found');
     };
 });
+*/
 
 //Allow users to add a movie to the list
+app.post('/Users/:Username/Movies/:_id', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $push: { Favorites : req.params._id } },
+        { new: true },
+        (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error: ' + err);
+            } else {
+                res.json(updatedUser);
+            }
+    });
+});
+/*
 app.post('/users/:movieList', (req, res) => {
     let newMovie = req.body;
 
@@ -161,16 +259,58 @@ app.post('/users/:movieList', (req, res) => {
         res.status(201).send(newMovie);
     }
 });
+*/
 
 //Allow user to remove a movie from the list
-app.delete('/users/:movieList', (req, res) => {
-    res.send('User movie has been deleted.')
-})
+app.delete('/Users/:Username/Movies/:_id', (req, res) => {
+    Users.findOneAndUpdate(
+        { Username : req.params.Username },
+        { $pull: { Favorites : req.params._id } }, 
+        { new: true},
+        (err, updatedUser) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error : ' + err);
+            } else {
+                res.json(updatedUser);
+            }
+        }
+    );
+});
+
+
+
+
+
 
 //Allow user to deregister
-app.delete('/users/:username', (req, res) => {
-    res.send('User has been deleted.')
-})
+app.delete('/Users/:Username', (req, res) => {
+    Users.findOneAndRemove({ Username : req.params.Username})
+    .then((user) => {
+        if(!user) {
+            res.status(400).send(req.params.Username + ' was not found.');
+        } else {
+            res.status(400).send(req.params.Username + ' was deleted');
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error : ' + err);
+    });
+});
+
+
+app.use('/documentation.html', express.static('public'));
+//This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+//This is an error-handling middleware function that will log all application-level errors to the terminal.
+
+
+ 
 
 //Open port 8080 which enables us to send and recieve through the server
 app.listen(8080, () => {
