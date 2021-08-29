@@ -1,37 +1,28 @@
-const express = require('express'),
-    bodyParser = require('body-parser');
-
-const passport = require('passport');
-require('./passport');
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 const Models = require('./models.js');
-//requires the mongoose package
-//requires the mongoose models in models.js
 
 const Movies = Models.Movie;
 const Users = Models.User;
 
 const app = express();
-//the module for express is called
-//the module express is encapsulated 
-
-const { check, validationResult } = require('express-validator');
-
-const cors = require('cors');
-app.use(cors());
-
-app.use(bodyParser.json());
-let auth = require('./auth')(app);
-//Please note the app argument you're passing here. This ensures that Express is available in your “auth.js” file as well.
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {
   useNewUrlParser: true, useUnifiedTopology: true
 });
-//allows mongoose to connect to database to perform CRUD operations
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+
+const passport = require('passport');
+require('./passport');
 
 //Return a greeting message to test server
-app.get('/', (req, res) => {
+app.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.send('Welcome to Movie REST API!');
 });
 
@@ -48,7 +39,7 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
   });
 
 //Return a list of all users
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
     .then((user) => {
         res.json(user);
@@ -59,7 +50,7 @@ app.get('/users', (req, res) => {
 });
 
 //Return a single movie by title to the user
-app.get('/movies/:title', (req, res) => {
+app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne( { Title : req.params.title } )
     .then((movie) => {
         res.json(movie);
@@ -71,7 +62,7 @@ app.get('/movies/:title', (req, res) => {
 });
 
 //return a single genre by name to user
-app.get('/Movies/:Genre.Name', (req, res) => {
+app.get('/Movies/:Genre.Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movie.findOne({Name : req.params.Name})
     .then((genre_name) => {
         res.json(genre_name);
@@ -82,7 +73,7 @@ app.get('/Movies/:Genre.Name', (req, res) => {
 });
 
 //Return a single director by name to user
-app.get('/Movies/:Director.Name', (req,res) => {
+app.get('/Movies/:Director.Name', passport.authenticate('jwt', { session: false }), (req,res) => {
     Movie.findOne( {Name : req.params.Name} )
     .then((director_name) => {
         res.json(director_name);
@@ -93,20 +84,7 @@ app.get('/Movies/:Director.Name', (req,res) => {
 });
 
 //Allow new users to register
-app.post('/users', [
-    check('Username', 'Username is required').isLength({min: 5}),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('Password', 'Password is required').not().isEmpty(),
-    check('Email', 'Email does not appear to be valid').isEmail()
-  ], (req, res) => {
-       // check the validation object for errors
-    let errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-    
-    let hashedPassword = User.hashPassword(req.body.password);
+app.post('/users', (req, res) => {
     Users.findOne( {Username: req.body.Username} )
     .then((user) => {
         if (user) {
@@ -114,16 +92,18 @@ app.post('/users', [
         } else {
           Users.create({
             Username: req.body.Username,
-            password: hashedPassword,
+            Password: req.body.Password,
             Email: req.body.Email,
             Birthday:  req.body.Birthday,
             Favorites: req.body.Favorites
           })
-          .then((user) => {res.status(201).json(user)} )
+          .then((user) => {
+              res.status(201).json(user)
+            })
           .catch((error) => {
               console.error(error);
               res.status(500).send('Error: ' + error);
-          })   
+          });   
         }
     })
     .catch((error) => {
@@ -133,7 +113,7 @@ app.post('/users', [
 });
 
 //Allow users to update information
-app.put('/Users/:Username', (req, res) => {
+app.put('/Users/:Username', passport.authenticate("jwt", { session: false }), (req, res) => {
     Users.findOneAndUpdate(
         { Username: req.params.Username },
         { $set: 
@@ -157,7 +137,7 @@ app.put('/Users/:Username', (req, res) => {
 
 
 //Allow users to add a movie to the list
-app.post('/Users/:Username/Movies/:_id', (req, res) => {
+app.post('/Users/:Username/Movies/:_id', passport.authenticate("jwt", { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username }, {
         $push: { Favorites : req.params._id } },
         { new: true },
@@ -172,7 +152,7 @@ app.post('/Users/:Username/Movies/:_id', (req, res) => {
 });
 
 //Allow user to remove a movie from the list
-app.delete('/Users/:Username/Movies/:_id', (req, res) => {
+app.delete('/Users/:Username/Movies/:_id', passport.authenticate("jwt", { session: false }), (req, res) => {
     Users.findOneAndUpdate(
         { Username : req.params.Username },
         { $pull: { Favorites : req.params._id } }, 
@@ -189,7 +169,7 @@ app.delete('/Users/:Username/Movies/:_id', (req, res) => {
 });
 
 //Allow user to deregister
-app.delete('/Users/:Username', (req, res) => {
+app.delete('/Users/:Username', passport.authenticate("jwt", { session: false }), (req, res) => {
     Users.findOneAndRemove({ Username : req.params.Username})
     .then((user) => {
         if(!user) {
@@ -204,18 +184,11 @@ app.delete('/Users/:Username', (req, res) => {
     });
 });
 
-
-app.use('/documentation.html', express.static('public'));
-//This function automatically routes all requests for static files to their corresponding files within a certain folder on the server
-
+//This is an error-handling middleware function that will log all application-level errors to the terminal.
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
 });
-//This is an error-handling middleware function that will log all application-level errors to the terminal.
-
-
- 
 
 //Open port 8080 which enables us to send and recieve through the server
 app.listen(8080, () => {
