@@ -8,6 +8,9 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 const app = express();
+const cors = require('cors');
+
+const { check, validationResult } = require('express-validator');
 
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {
   useNewUrlParser: true, useUnifiedTopology: true
@@ -15,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 let auth = require('./auth')(app);
 
@@ -50,10 +54,10 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 });
 
 //Return a single movie by title to the user
-app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne( { Title : req.params.title } )
-    .then((movie) => {
-        res.json(movie);
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.findOne( { "movies.Title" : { $regex: req.params.Title, $options: "i" } } )
+    .then((movies) => {
+        res.json(movies.Title);
     })
     .catch((err) => {
         console.error(err);
@@ -61,11 +65,19 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
     });
 });
 
+/*
+So my url is getting using the title parameter to get the movie ('/movies/:Title'). If I'm looking through the movie object using the object key Title ("movies.Title"), shouldn't I be able to return a JSON object through movies.Title?
+
+
+
+
+*/
+
 //return a single genre by name to user
-app.get('/Movies/:Genre.Name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movie.findOne({Name : req.params.Name})
-    .then((genre_name) => {
-        res.json(genre_name);
+app.get('/genre/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.findOne( { "Genre.Name" : { $regex: req.params.Genre, $options: "i"} })
+    .then((movie) => {
+        res.json(movie.Genre);
     }).catch((err) => {
         console.error(err);
         res.status(500).send('Error: ' + err);
@@ -73,10 +85,10 @@ app.get('/Movies/:Genre.Name', passport.authenticate('jwt', { session: false }),
 });
 
 //Return a single director by name to user
-app.get('/Movies/:Director.Name', passport.authenticate('jwt', { session: false }), (req,res) => {
-    Movie.findOne( {Name : req.params.Name} )
-    .then((director_name) => {
-        res.json(director_name);
+app.get('/directors/:director', passport.authenticate('jwt', { session: false }), (req,res) => {
+    Movies.findOne( { "Director.Name" : { $regex: req.params.director, $options: "i" } })
+    .then((movie) => {
+        res.json(movie.Director);
     }).catch((err) => {
         console.error(err);
         res.status(500).send('Error: ' + err);
@@ -85,6 +97,7 @@ app.get('/Movies/:Director.Name', passport.authenticate('jwt', { session: false 
 
 //Allow new users to register
 app.post('/users', (req, res) => {
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne( {Username: req.body.Username} )
     .then((user) => {
         if (user) {
@@ -92,7 +105,7 @@ app.post('/users', (req, res) => {
         } else {
           Users.create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword,
             Email: req.body.Email,
             Birthday:  req.body.Birthday,
             Favorites: req.body.Favorites
@@ -134,7 +147,6 @@ app.put('/Users/:Username', passport.authenticate("jwt", { session: false }), (r
         }
     });
 });
-
 
 //Allow users to add a movie to the list
 app.post('/Users/:Username/Movies/:_id', passport.authenticate("jwt", { session: false }), (req, res) => {
