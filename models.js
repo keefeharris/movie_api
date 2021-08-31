@@ -2,9 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt'); 
 
 let movieSchema = mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Movie'
-    },
     Title: {
         type: String,
         required: true
