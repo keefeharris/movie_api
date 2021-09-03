@@ -54,24 +54,16 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 });
 
 //Return a single movie by title to the user
-app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne( { "movies.Title" : { $regex: req.params.Title, $options: "i" } } )
-    .then((movies) => {
-        res.json(movies.Title);
+app.get("/movies/:Title", passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.findOne( { "Title" : { $regex: req.params.Title, $options: "i" } } )
+    .then((movie) => {
+        res.json(movie);
     })
     .catch((err) => {
         console.error(err);
         res.status(500).send('Error: ' + err);
     });
 });
-
-/*
-So my url is getting using the title parameter to get the movie ('/movies/:Title'). If I'm looking through the movie object using the object key Title ("movies.Title"), shouldn't I be able to return a JSON object through movies.Title?
-
-
-
-
-*/
 
 //return a single genre by name to user
 app.get('/genre/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
