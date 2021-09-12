@@ -1,8 +1,0 @@
-{"_id":{"$oid":"60f87459241ff412082f506c"},"Username":"fadiascanny","Password":"asdf456","Email":"fadiascanny@aol.com","Birthday":{"$date":"1978-08-29T00:00:00Z"},"Favorites":[{"$oid":"60f772f032c3b648e0ee0ad2"}]}
-{"_id":{"$oid":"61037a0495f06b9fd63de5c7"},"Username":"keefeharris","Password":"qwerty123","Email":"keefeharris@yahoo.com","Birthday":{"$date":"1985-02-19T00:00:00Z"},"Favorites":[]}
-{"_id":{"$oid":"61037a2695f06b9fd63de5c8"},"Username":"natashamazur","Password":"zxcv781","Email":"natashamazur@yahoo.com","Birthday":{"$date":"1995-11-05T00:00:00Z"},"Favorites":[]}
-{"_id":{"$oid":"61037a3495f06b9fd63de5c9"},"Username":"domsophia","Password":"uiop890","Email":"domsophia@comcast.net","Birthday":{"$date":"1989-09-19T00:00:00Z"},"Favorites":[]}
-{"_id":{"$oid":"61037a4895f06b9fd63de5ca"},"Username":"terrellcarlos","Password":"vbnm5678","Email":"terrellcarlos@yahoo.com","Birthday":{"$date":"1993-01-11T00:00:00Z"},"Favorites":[]}
-{"_id":{"$oid":"61086a25e9042a2d3071bc2b"},"Favorites":[],"Username":"asdfasdf","Password":"h9whfw","Email":"uiop@yahoo.com","__v":0,"Birthday":null}
-{"_id":{"$oid":"612c0238abb48d1664edfd47"},"Favorites":[],"Username":"drewbreez","Password":"pkmstoner","Email":"notevencuzy@gmail.com","Birthday":{"$date":"1986-03-02T00:00:00Z"},"__v":0}
-{"_id":{"$oid":"612c17a7b050b504503d84b2"},"Favorites":[],"Username":"crashbandicoot","Password":"playstation1","Email":"top10videogame@yahoo.com","Birthday":{"$date":"1999-01-01T00:00:00Z"},"__v":0}
