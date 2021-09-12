@@ -36,8 +36,8 @@ app.get('/', (req, res) => {
     res.send('Welcome to kwhjmoviesdb API!');
 });
 
-app.get("/documentation", (req, res) => {
-    res.status(200).sendFile(`${__dirname}/public/documentation.html`);
+app.get('/documentation', (req, res) => {
+    res.status(200).sendFile('public/documentation.html', { root: __dirname });
 });
 
 //Return a list of ALL movies to the user
