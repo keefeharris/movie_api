@@ -1,139 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation for Movie API</title>
 </head>
+
 <body>
     <h1>Overview</h1>
     <p>
-        The server-side component of a Movie API web application will provide users with access to information about different
+        The server-side component of a Movie API web application will provide users with access to information about
+        different
         movies, directors, and genres. Users will be able to sign up, update their
         personal information, and create a list of their favorite movies.
     </p>
 
     <h2>Pre-built components</h2>
-    <p>Create - Users are able to create a profile and add personal information from their username to favorite movies.</p>
+    <p>Create information- Users are able to create a profile and add personal information from their username to
+        favorite movies.</p>
     <P>Gather information - Information on movies can be viewed by user to help decide what they may like.</P>
     <p>Update information - All the information gathered for the user information can be updated.</p>
-    <p>Delete - A variety of information can be removed from a favorite movie to a user's profile.</p>
+    <p>Delete information - A variety of information can be removed from a favorite movie to a user's profile.</p>
 
     <h2>Endpoints for movie_api.</h2>
     <p>
-        This enpoint returns a string that confirms that user is connected to server.
+        This enpoint returns a string that confirms that user is connected to server with a welcome statement.
         Endpoint: app.get('/')
         Method Type: GET
         Query Parameters: None
         Format of body of request: None
         Format of response data: A string greeting the user to confirm connection.
-    </p>
-    
-    <p>
-        This enpoint returns a JSON object of all movies.
-        Endpoint: app.get('/movies')
-        Method Type: GET  
-        Query Parameters: None
-        Format of body of request: None
-        Format of response data: Returns a JSON object that comes from the movie array
+        Example:
+        "Welcome to kwhjmoviesdb movie app!"
     </p>
 
     <p>
-        This enpoint returns a movie by the title to the user in the form of a JSON object.
-        Endpoint: app.get('/movies/:title')
+        This endpoint returns the documentation (documentaion.html) from the public folder
+        Endpoint: app.get("/documentation")
+        Method: GET
+        Query Parameters: none
+        Format of body of request: none
+        Format of response Data: HTML
+    </p>
+
+    <p>
+        This enpoint returns a JSON object of all movies.
+        Endpoint: app.get('/movies')
         Method Type: GET
-        Query Parameters: :title
+        Query Parameters: None
+        Format of body of request: None
+        Format of response data: JSON
+        Example:
+        {
+        "_id" : ObjectId("6103773195f06b9fd63de5c6"),
+        "Title" : "The Lord Of The Rings: The Fellowship Of The Rings",
+        "Description" : "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful
+        One Ring and save Middle-earth from the Dark Lord Sauron.",
+        "Genre" :
+        {
+        "Name" : "Adventure",
+        "Description" : " An adventure is an event or series of events that happens outside the course of the
+        protagonists ordinary life, usually accompanied by danger, often by physical action."
+        },
+        "Director" :
+        {
+        "Name" : "Peter Jackson",
+        "Bio" : "Sir Peter Robert Jackson ONZ KNZM is a New Zealand film director, producer, and screenwriter. He is
+        best known as the director, writer, and producer.",
+        "Birth" : "1961-10-31"
+        },
+        "ImagePath" :
+        "https://upload.wikimedia.org/wikipedia/en/8/8a/The_Lord_of_the_Rings_The_Fellowship_of_the_Ring_%282001%29.jpg",
+        "Featured" : false
+        }
+    </p>
+
+    <p>
+        This endpoint returns a JSON object of all users.
+        Endpoint: app.get('/users')
+        Method Type: GET
+        Query Parameters: none
+        Format of body of request: none
+        Format of response data: JSON
+        Example:
+        {
+        "Favorites": [],
+        "id": "7389rhf8293r9few9",
+        "Username": "keefeharris",
+        "Password": "keefeharris@gmail.com",
+        "Birthday": "1989-05-09"
+        }
+    </p>
+    <p>
+        This enpoint returns a movie by the title to the user in the form of a JSON object.
+        Endpoint: app.get('/movies/:Title')
+        Method Type: GET
+        Query Parameters: :Title
         Format of body of request: None
         Format of response data: JSON object
+        Example:
         {
-            "title": "The Shawshank Redemption",
-            "genre": "drama",
-            "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency."
+        "Title": "The Shawshank Redemption",
+        "Genre": "drama",
+        "Description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through
+        acts of common decency."
         }
     </p>
 
     <p>
         This enpoint returns information of a genre by the name in the form of a JSON object.
-        Endpoint: app.get('/genres/:name')
+        Endpoint: app.get('/genres/:Genres')
         Method Type: GET
         Query Parameters: :name
-        Format of body of request: None 
+        Format of body of request: None
         Format of response data: JSON object
+        Example:
         {
-            "name": "Action",
-            "description": "Action film is a film genre in which the protagonist or protagonists are thrust into a series of events that typically include violence, extended fighting, physical feats, rescues and frantic chases."
+        "Name": "Action",
+        "Description": "Action film is a film genre in which the protagonist or protagonists are thrust into a series of
+        events that typically include violence, extended fighting, physical feats, rescues and frantic chases."
         }
     </p>
 
     <p>
         This enpoint returns information of a director by name in the form of a JSON object.
-        Endpoint: app.get('/directors/:name')
+        Endpoint: app.get('/directors/:Director')
         Method Type: GET
-        Query Parameters: :name
+        Query Parameters: :Director
         Format of body of request: None
         Format of response data: JSON object
+        Example:
         {
-            "name": "Frank Darabont",
-            "birthYear": "January 28, 1959",
-            "bio": "Frank Árpád Darabont is a French-American film director, screenwriter and producer of Hungarian descent. He has been nominated for three Academy Awards and a Golden Globe Award.",
-            "movie": ""
+        "Name": "Frank Darabont",
+        "BirthYear": "January 28, 1959",
+        "Bio": "Frank Árpád Darabont is a French-American film director, screenwriter and producer of Hungarian descent.
+        He has been nominated for three Academy Awards and a Golden Globe Award."
         }
     </p>
 
     <p>
         This enpoint allows users to register by posting JSON object.
         Endpoint: app.post('/users')
-        Method Type: POST    
+        Method Type: POST
         Query Parameters: None
-        Format of body of request: A JSON object holding data about a user.
+        Format of body of request: JSON object
+        Example:
         {
-            "name": "keefe",
-            "password": "asdfghj"
+        "name": "keefe",
+        "password": "asdfghj"
         }
-        Format of response data: A JSON object holding data about a user, including an ID.
+
+        Format of response data: JSON object (holding data about a user, including an ID)
+        Example:
         {
-            "name": "keefe",
-            "password": "asdfghj",
-            "id": "4f2dd768-5f6e-4832-8b62-04358f2f565e"
+        "name": "keefe",
+        "password": "asdfghj",
+        "id": "4f2dd768-5f6e-4832-8b62-04358f2f565e"
         }
     </p>
 
     <p>
         This enpoint allows user to update their username.
-        Endpoint: app.put('/users/:username')
+        Endpoint: app.put('/Users/:Username')
         Method Type: PUT
-        Query Parameters: :username
-        Format of body of request: None
+        Query Parameters: :Username
+        Format of body of request: JSON object
+        Example:
+        {
+        "Username" : "keefe",
+        "Password" : "nfdioavhio"
+        }
         Format of response data: A string is used as response confirming the update.
+        Example:
         "User keefe will be assigned a new username."
     </p>
 
     <p>
         This enpoint adds a movie to the movie list.
-        Endpoint: app.post('/users/:movieList')
-        Method Type: POST  
-        Query Parameters: :movieList
-        Format of body of request: none 
-        Format of response data: An update JSON object with added movie.
+        Endpoint: app.post('/Users/:Username/Movies/:_id')
+        Method Type: POST
+        Query Parameters: :Username, :_id
+        Format of body of request: none
+        Format of response data: JSON object
+        Example:
+        {
+        "Favorites" : [],
+        "_id" : "759302hfu9ew",
+        "Username" : "Keefe",
+        "Password" : "t092ufjr",
+        "Email" : "harris@gmail.com",
+        "Birthday" : "1989-05-09"
+        }
     </p>
 
     <p>
-        This enpoint returns a string that confirms that user is connected to server.
-        Endpoint: app.delete('/users/:movieList')
+        This enpoint returns a string that confirms that user deleted a movie from their favorites.
+        Endpoint: app.delete('/users/:Username/Movies/:_id')
         Method Type: DELETE
-        Query Parameters: :movielist
-        Format of body of request: None 
+        Query Parameters: :Username, :_id
+        Format of body of request: None
         Format of response data: A string confirming that the movie list has been updated.
+        Example:
+        "(:id) has been removed from (:Username) favorites list."
     </p>
 
     <p>
-        This enpoint returns a string that confirms that user is connected to server.
-        Endpoint: app.delete('/users/:username')
-        Method Type: DELETE    
-        Query Parameters: :username
+        This enpoint returns a string that confirms that user is removed from the database.
+        Endpoint: app.delete('/Users/:Username')
+        Method Type: DELETE
+        Query Parameters: :Username
         Format of body of request: None
-        Format of response data: A string confirming that user has been deleted. 
+        Format of response data: A string confirming that user has been deleted.
+        Example:
+        "User [:Username] has been removed from the database"
+        }
     </p>
 </body>
+
 </html>
